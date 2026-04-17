@@ -149,7 +149,9 @@ Since Guide 4, we need additional AWS permissions for Aurora and related service
         "secretsmanager:DescribeSecret",
         "secretsmanager:GetSecretValue",
         "secretsmanager:PutSecretValue",
-        "secretsmanager:UpdateSecret"
+        "secretsmanager:UpdateSecret",
+        "secretsmanager:TagResource",
+        "secretsmanager:GetResourcePolicy"
       ],
       "Resource": "*"
     },

@@ -3,7 +3,7 @@
 Watch CloudWatch logs from all Alex agents in real-time.
 Polls all 5 agent log groups simultaneously and displays output with color coding.
 """
-
+import os
 import boto3
 import time
 import sys
@@ -35,11 +35,14 @@ LOG_GROUPS = {
 }
 
 
+REGION = os.getenv('DEFAULT_AWS_REGION', 'eu-west-1')  # Change this if your agents are in a different region
+
 class AgentLogWatcher:
     """Watches CloudWatch logs for all agents."""
 
-    def __init__(self, region: str = 'us-east-1', lookback_minutes: int = 5):
+    def __init__(self, region: str = '', lookback_minutes: int = 5):
         """Initialize the log watcher."""
+        print(f"{COLORS['BOLD']}Initializing AgentLogWatcher for region: {region}{COLORS['RESET']}")
         self.logs_client = boto3.client('logs', region_name=region)
         self.lookback_minutes = lookback_minutes
         self.last_timestamps = {agent: 0 for agent in LOG_GROUPS}
@@ -179,8 +182,8 @@ def main():
     parser = argparse.ArgumentParser(description='Watch CloudWatch logs from all Alex agents')
     parser.add_argument(
         '--region',
-        default='us-east-1',
-        help='AWS region (default: us-east-1)'
+        default=REGION,
+        help=f'AWS region (default: {REGION})'
     )
     parser.add_argument(
         '--lookback',
